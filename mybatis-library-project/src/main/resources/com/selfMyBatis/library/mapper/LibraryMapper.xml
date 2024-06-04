@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.selfMyBatis.library.mapper.LibraryMapper">
+
+    <resultMap id="memberResultMap" type="com.selfMyBatis.library.dto.MemberDto">
+        <id property="code" column="MEMBER_ID"/>
+        <result property="name" column="MEMBER_NAME"/>
+        <result property="phone" column="PHONE"/>
+    </resultMap>
+
+    <resultMap id="bookResultMap" type="com.selfMyBatis.library.dto.BookDto">
+        <id property="bookId" column="BOOK_ID"/>
+        <result property="title" column="TITLE"/>
+        <result property="author" column="AUTHOR"/>
+        <result property="publisher" column="PUBLISHER"/>
+        <result property="isAvailable" column="ISAVAILABLE"/>
+        <result property="barcode" column="BARCODE"/>
+    </resultMap>
+
+    <resultMap id="rentResultMap" type="com.selfMyBatis.library.dto.RentDto">
+        <id property="rentId" column="RENT_ID"/>
+        <result property="memberId" column="MEMBER_ID"/>
+        <result property="bookId" column="BOOK_ID"/>
+        <result property="rentDate" column="RENT_DATE"/>
+        <result property="returnDate" column="RETURN_DATE"/>
+    </resultMap>
+
+    <insert id="insertMember" parameterType="hashmap">
+        INSERT INTO MEMBER( MEMBER_NAME, PHONE)
+        VALUES( #{ name }, #{ phone } )
+    </insert>
+
+    <select id="selectAllMember" resultMap="memberResultMap">
+        SELECT *
+        FROM MEMBER
+    </select>
+
+    <select id="selectMemberByNameAndPhone" parameterType="hashmap" resultMap="memberResultMap">
+        SELECT *
+        FROM MEMBER
+        <where>
+            <if test="name != null and name != ''">
+                AND MEMBER_NAME = #{ name }
+            </if>
+            <if test="phone != null and phone != ''">
+                AND PHONE = #{ phone }
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllBook" resultMap="bookResultMap">
+        SELECT *
+        FROM BOOK
+    </select>
+
+    <select id="selectBook" resultMap="bookResultMap">
+        SELECT *
+        FROM BOOK
+        WHERE BARCODE = #{ barcode }
+    </select>
+    
+    <insert id="insertBook" parameterType="hashmap">
+        INSERT INTO BOOK(
+        TITLE,
+        AUTHOR,
+        PUBLISHER,
+        ISAVAILABLE,
+        BARCODE)
+        VALUES( #{ title }, #{ author }, #{ publisher }, 'Y', #{ barcode })
+    </insert>
+
+    <insert id="rentBook" parameterType="hashmap">
+        INSERT INTO RENT( MEMBER_ID, BOOK_ID, RENT_DATE )
+        VALUES( #{ memberId } , #{ bookId } , CURRENT_TIMESTAMP )
+    </insert>
+
+</mapper>

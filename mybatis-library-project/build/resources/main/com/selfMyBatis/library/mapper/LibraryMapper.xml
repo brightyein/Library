@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.selfMyBatis.library.mapper.LibraryMapper">
+    <resultMap id="libraryResultMap" type="com.selfMyBatis.library.dto.MemberDto">
+        <id property="code" column="MEMBER_ID"/>
+        <result property="name" column="MEMBER_NAME"/>
+        <result property="phone" column="PHONE"/>
+    </resultMap>
+
+    <select id="selectAllMember" resultMap="libraryResultMap">
+        SELECT *
+        FROM MEMBER
+    </select>
+
+</mapper>
